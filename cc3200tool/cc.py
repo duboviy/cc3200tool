@@ -891,8 +891,8 @@ class CC3200Connection(object):
             log.debug("This looks like the NWP already")
             return
 
-        if vinfo.bootloader[1] < 1:
-            raise CC3200Error("Unsupported device")
+        # if vinfo.bootloader[1] < 1:
+        #     raise CC3200Error("Unsupported device")
 
         if vinfo.bootloader[1] == 3:
             # cesanta upload and exec rbtl3101_132.dll for this version
@@ -938,7 +938,7 @@ class CC3200Connection(object):
             if not self._read_ack():
                 raise CC3200Error("no ACK after Switch UART to APPS MCU command")
         elif platform.system() == 'Linux':
-            for i in range(10):
+            for i in range(9):
                 self.port.send_break()
             if not self._read_ack():
                 raise CC3200Error("no ACK after Switch UART to APPS MCU command")
