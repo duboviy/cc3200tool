@@ -891,8 +891,8 @@ class CC3200Connection(object):
             log.debug("This looks like the NWP already")
             return
 
-        # if vinfo.bootloader[1] < 1:
-        #     raise CC3200Error("Unsupported device")
+        if vinfo.bootloader[1] < 1:
+            log.info("This is not CC32xx device type!")
 
         if vinfo.bootloader[1] == 3:
             # cesanta upload and exec rbtl3101_132.dll for this version
