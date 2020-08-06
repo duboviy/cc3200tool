@@ -77,13 +77,13 @@ SLFS_SIZE_MAP = {
 SLFS_BLOCK_SIZE = 4096
 
 # defines from cc3200-sdk/simplelink/include/fs.h
-SLFS_FILE_OPEN_FLAG_COMMIT = 0x1              # /* MIRROR - for fail safe */
-SLFS_FILE_OPEN_FLAG_SECURE = 0x2              # /* SECURE */
-SLFS_FILE_OPEN_FLAG_NO_SIGNATURE_TEST = 0x4   # /* Relevant to secure file only  */
-SLFS_FILE_OPEN_FLAG_STATIC = 0x8              # /* Relevant to secure file only */
-SLFS_FILE_OPEN_FLAG_VENDOR = 0x10             # /* Relevant to secure file only */
-SLFS_FILE_PUBLIC_WRITE = 0x20                 # /* Relevant to secure file only, the file can be opened for write without Token */
-SLFS_FILE_PUBLIC_READ = 0x40                  # /* Relevant to secure file only, the file can be opened for read without Token  */
+SLFS_FILE_OPEN_FLAG_COMMIT = 0x1  # /* MIRROR - for fail safe */
+SLFS_FILE_OPEN_FLAG_SECURE = 0x2  # /* SECURE */
+SLFS_FILE_OPEN_FLAG_NO_SIGNATURE_TEST = 0x4  # /* Relevant to secure file only  */
+SLFS_FILE_OPEN_FLAG_STATIC = 0x8  # /* Relevant to secure file only */
+SLFS_FILE_OPEN_FLAG_VENDOR = 0x10  # /* Relevant to secure file only */
+SLFS_FILE_PUBLIC_WRITE = 0x20  # /* Relevant to secure file only, the file can be opened for write without Token */
+SLFS_FILE_PUBLIC_READ = 0x40  # /* Relevant to secure file only, the file can be opened for read without Token  */
 
 SLFS_MODE_OPEN_READ = 0
 SLFS_MODE_OPEN_WRITE = 1
@@ -110,7 +110,7 @@ def pinarg(extra=None):
             apin = apin[1:]
         if apin not in choices:
             raise argparse.ArgumentTypeError("{} not one of {}".format(
-                    apin, choices))
+                apin, choices))
         return Pincfg(invert, apin)
 
     return _parse
@@ -124,92 +124,92 @@ def auto_int(x):
 parser = argparse.ArgumentParser(description='Serial flash utility for CC3200')
 
 parser.add_argument(
-        "-p", "--port", type=str, default="/dev/ttyUSB0",
-        help="The serial port to use")
+    "-p", "--port", type=str, default="/dev/ttyUSB0",
+    help="The serial port to use")
 parser.add_argument(
-        "--reset", type=pinarg(['prompt']), default="none",
-        help="dtr, rts, none or prompt, optinally prefixed by ~ to invert")
+    "--reset", type=pinarg(['prompt']), default="none",
+    help="dtr, rts, none or prompt, optinally prefixed by ~ to invert")
 parser.add_argument(
-        "--sop2", type=pinarg(), default="none",
-        help="dtr, rts or none, optinally prefixed by ~ to invert")
+    "--sop2", type=pinarg(), default="none",
+    help="dtr, rts or none, optinally prefixed by ~ to invert")
 parser.add_argument(
-        "--erase_timeout", type=auto_int, default=ERASE_TIMEOUT,
-        help="Specify block erase timeout for all operations which involve block erasing")
+    "--erase_timeout", type=auto_int, default=ERASE_TIMEOUT,
+    help="Specify block erase timeout for all operations which involve block erasing")
 parser.add_argument(
-        "--reboot-to-app", action="store_true",
-        help="When finished, reboot to the application")
+    "--reboot-to-app", action="store_true",
+    help="When finished, reboot to the application")
 
 subparsers = parser.add_subparsers(dest="cmd")
 
 parser_find_device = subparsers.add_parser(
-        "find_device", help="Find device")
+    "find_device", help="Find device")
 
 parser_format_flash = subparsers.add_parser(
-        "format_flash", help="Format the flash memory")
+    "format_flash", help="Format the flash memory")
 parser_format_flash.add_argument(
-        "-s", "--size", choices=SLFS_SIZE_MAP.keys(), default="1M")
+    "-s", "--size", choices=SLFS_SIZE_MAP.keys(), default="1M")
 
 parser_erase_file = subparsers.add_parser(
-        "erase_file", help="Erase a file from the SL filesystem")
+    "erase_file", help="Erase a file from the SL filesystem")
 parser_erase_file.add_argument(
-        "filename", help="file on the target to be removed")
+    "filename", help="file on the target to be removed")
 
 parser_write_file = subparsers.add_parser(
-        "write_file", help="Upload a file on the SL filesystem")
+    "write_file", help="Upload a file on the SL filesystem")
 parser_write_file.add_argument(
-        "local_file", type=argparse.FileType('rb'),
-        help="file on the local file system")
+    "local_file", type=argparse.FileType('rb'),
+    help="file on the local file system")
 parser_write_file.add_argument(
-        "cc_filename", help="file name to write on the target")
+    "cc_filename", help="file name to write on the target")
 parser_write_file.add_argument(
-        "--signature", type=argparse.FileType('rb'),
-        help="file which contains the 256 bytes of signature for secured files")
+    "--signature", type=argparse.FileType('rb'),
+    help="file which contains the 256 bytes of signature for secured files")
 parser_write_file.add_argument(
-        "--file-size", type=auto_int, default=0,
-        help="allows allocating more space than needed for this upload")
+    "--file-size", type=auto_int, default=0,
+    help="allows allocating more space than needed for this upload")
 parser_write_file.add_argument(
-        "--commit-flag", action="store_true",
-        help="enables fail safe MIRROR feature")
+    "--commit-flag", action="store_true",
+    help="enables fail safe MIRROR feature")
 
 parser_read_file = subparsers.add_parser(
-        "read_file", help="read a file from the SL filesystem")
+    "read_file", help="read a file from the SL filesystem")
 parser_read_file.add_argument(
-        "cc_filename", help="file to read from the target")
+    "cc_filename", help="file to read from the target")
 parser_read_file.add_argument(
-        "local_file", type=argparse.FileType('wb'),
-        help="local path to store the file contents in")
+    "local_file", type=argparse.FileType('wb'),
+    help="local path to store the file contents in")
 
 parser_write_flash = subparsers.add_parser(
-        "write_flash", help="Write a Gang image on the flash")
+    "write_flash", help="Write a Gang image on the flash")
 parser_write_flash.add_argument(
-        "image_file", type=argparse.FileType('rb'),
-        help="gang image file prepared with Uniflash")
+    "image_file", type=argparse.FileType('rb'),
+    help="gang image file prepared with Uniflash")
 parser_write_flash.add_argument(
-        "--no-erase", type=bool, default=False,
-        help="do not perform an erase before write (for blank chips)")
+    "--no-erase", type=bool, default=False,
+    help="do not perform an erase before write (for blank chips)")
 
 parser_read_flash = subparsers.add_parser(
-        "read_flash", help="Read SFFS contents into the file")
+    "read_flash", help="Read SFFS contents into the file")
 parser_read_flash.add_argument(
-        "dump_file", type=argparse.FileType('w+'),
-        help="path to store the SFFS dump")
+    "dump_file", type=argparse.FileType('w+'),
+    help="path to store the SFFS dump")
 parser_read_flash.add_argument(
-        "--offset", type=auto_int, default=0,
-        help="starting offset (default is 0)")
+    "--offset", type=auto_int, default=0,
+    help="starting offset (default is 0)")
 parser_read_flash.add_argument(
-        "--size", type=auto_int, default=-1,
-        help="dump size (default is complete SFFS)")
-
+    "--size", type=auto_int, default=-1,
+    help="dump size (default is complete SFFS)")
 
 parser_list_filesystem = subparsers.add_parser(
-        "list_filesystem",
-        help="List SFFS contents and statistics (blocks total/used, inter-file gaps, etc)")
+    "list_filesystem",
+    help="List SFFS contents and statistics (blocks total/used, inter-file gaps, etc)")
 parser_list_filesystem.add_argument(
-        "--json-output", action="store_true",
-        help="output in JSON format to stdout")
+    "--json-output", action="store_true",
+    help="output in JSON format to stdout")
 parser_list_filesystem.add_argument(
-        "--inactive", action="store_true",
-        help="output inactive FAT copy")
+    "--inactive", action="store_true",
+    help="output inactive FAT copy")
+
 
 def load_file(fname):
     data = []
@@ -217,6 +217,7 @@ def load_file(fname):
         data = f.read()
         assert len(data) > 0
     return data
+
 
 def dll_data(fname):
     return get_data('cc3200tool', os.path.join('dll', fname))
@@ -237,15 +238,19 @@ class CC3x00VersionInfo(object):
     @property
     def is_cc32xx(self):
         return (self.chip_type[0] & 0x10) != 0
+
     @property
     def is_cc3220(self):
         return (self.chip_type[0] == 0x10)
+
     @property
     def is_cc3220s(self):
         return (self.chip_type[0] == 0x18)
+
     @property
     def is_cc3220sf(self):
         return (self.chip_type[0] == 0x19)
+
     @property
     def chip_name(self):
         if self.is_cc3220: return "CC3220"
@@ -509,7 +514,6 @@ class CustomJsonEncoder(json.JSONEncoder):
 
 
 class CC3200Connection(object):
-
     TIMEOUT = 60
     DEFAULT_SLFS_SIZE = "1M"
 
@@ -557,7 +561,7 @@ class CC3200Connection(object):
             ))
             raw_input()
             return
-        
+
         in_reset = True ^ self._reset.invert
         if self._reset.pin == 'dtr':
             self.port.dtr = in_reset
@@ -621,7 +625,7 @@ class CC3200Connection(object):
         time.sleep(0.001)
         if not self._read_ack(timeout):
             raise CC3200Error(
-                    "No ack for packet opcode=0x{:02x}".format(ord(data[0])))
+                "No ack for packet opcode=0x{:02x}".format(ord(data[0])))
 
     def _send_ack(self):
         self.port.write('\x00\xCC')
@@ -633,15 +637,15 @@ class CC3200Connection(object):
         return CC3x00Status(ord(status))
 
     def _do_break(self, timeout):
-        
+
         time.sleep(1.0)
-        self.port.dtr = 0 # TODO: add function reset_pin(0)
+        self.port.dtr = 0  # TODO: add function reset_pin(0)
         log.info("break_on")
-        if platform.system() == 'Darwin': # For mac os
+        if platform.system() == 'Darwin':  # For mac os
             for i in range(3):
                 self.port.send_break()
-        elif platform.system() == 'Linux': # For mac os
-            for i in range(9):
+        elif platform.system() == 'Linux':
+            for i in range(10):
                 self.port.send_break()
         else:
             self.port.send_break()
@@ -653,7 +657,7 @@ class CC3200Connection(object):
         if self._read_ack(timeout):
             return True
         else:
-            self.port.dtr = 1 # TODO: add function reset_pin(1)
+            self.port.dtr = 1  # TODO: add function reset_pin(1)
             return False
 
     def _try_breaking(self, tries=5, timeout=2):
@@ -704,7 +708,7 @@ class CC3200Connection(object):
         chunk_size = 4080
         sent = 0
         while sent < len(data):
-            chunk = data[sent:sent+chunk_size]
+            chunk = data[sent:sent + chunk_size]
             self._send_chunk(offset + sent, chunk, storage_id)
             s = self._get_last_status()
             if not s.is_ok:
@@ -719,25 +723,25 @@ class CC3200Connection(object):
 
     def _fs_programming(self, flags, chunk, key=''):
         command = OPCODE_FS_PROGRAMMING + \
-            struct.pack(">HHI", len(key), len(chunk), flags)
-        #log.info('FS programming header: %s', hexify(command + key))
+                  struct.pack(">HHI", len(key), len(chunk), flags)
+        # log.info('FS programming header: %s', hexify(command + key))
         self._send_packet(command + key + chunk)
         response = self.port.read(4)
         assert len(response) == 4
         status = 0
         for b in response:
             status = (status << 8) + ord(b)
-        #log.info('FS programming request: %d, response %s: %d', len(chunk), hexify(response), status)
+        # log.info('FS programming request: %d, response %s: %d', len(chunk), hexify(response), status)
         return status
-    
+
     def _erase_blocks(self, start, count, storage_id=STORAGE_ID_SRAM):
         command = OPCODE_RAW_STORAGE_ERASE + \
-            struct.pack(">III", storage_id, start, count)
+                  struct.pack(">III", storage_id, start, count)
         self._send_packet(command, timeout=self._erase_timeout)
 
     def _send_chunk(self, offset, data, storage_id=STORAGE_ID_SRAM):
         command = OPCODE_RAW_STORAGE_WRITE + \
-            struct.pack(">III", storage_id, offset, len(data))
+                  struct.pack(">III", storage_id, offset, len(data))
         self._send_packet(command + data)
 
     def _raw_write(self, offset, data, storage_id=STORAGE_ID_SRAM):
@@ -773,7 +777,7 @@ class CC3200Connection(object):
     def _read_chunk(self, offset, size, storage_id=STORAGE_ID_SRAM):
         # log.info("Reading chunk at 0x%x size 0x%x..." % (offset, size))
         command = OPCODE_RAW_STORAGE_READ + \
-            struct.pack(">III", storage_id, offset, size)
+                  struct.pack(">III", storage_id, offset, size)
         self._send_packet(command)
         data = self._read_packet()
         if len(data) != size:
@@ -821,8 +825,8 @@ class CC3200Connection(object):
 
     def _get_file_info(self, filename):
         command = OPCODE_GET_FILE_INFO \
-            + struct.pack(">I", len(filename)) \
-            + filename
+                  + struct.pack(">I", len(filename)) \
+                  + filename
         self._send_packet(command)
         finfo = self._read_packet()
         if len(finfo) < 5:
@@ -852,7 +856,7 @@ class CC3200Connection(object):
 
     def _open_file(self, filename, slfs_flags):
         command = OPCODE_START_UPLOAD + struct.pack(">II", slfs_flags, 0) + \
-            filename + '\x00\x00'
+                  filename + '\x00\x00'
         self._send_packet(command)
 
         token = self.port.read(4)
@@ -892,7 +896,7 @@ class CC3200Connection(object):
             return
 
         if vinfo.bootloader[1] < 1:
-            log.info("This is not CC32xx device type!")
+            log.warning("This is NOT CC32xx device type!")
 
         if vinfo.bootloader[1] == 3:
             # cesanta upload and exec rbtl3101_132.dll for this version
@@ -914,17 +918,17 @@ class CC3200Connection(object):
             if not self._read_ack():
                 raise CC3200Error("got no ACK after exec from ram")
         elif vinfo.bootloader[1] == 1:
-            self._get_storage_info(0) # step 4
-            self.erase_raw_storage(0, 0, 3) # step 5
+            self._get_storage_info(0)  # step 4
+            self.erase_raw_storage(0, 0, 3)  # step 5
             sram_patches = os.path.join(CURRENT_PATH, 'dll/gen2/BTL_ram.ptc')
-            self.write_raw_storage(0, 0, load_file(sram_patches)) # step 6
-            self._exec_from_ram() # step 7, initialization is completed.
+            self.write_raw_storage(0, 0, load_file(sram_patches))  # step 6
+            self._exec_from_ram()  # step 7, initialization is completed.
             if not self._read_ack():
                 raise CC3200Error('no second ACK after execute from RAM command')
-            self._get_storage_info(2) # step 8
-            self.erase_raw_storage(2, 33, 2) # step 9
+            self._get_storage_info(2)  # step 8
+            self.erase_raw_storage(2, 33, 2)  # step 9
             sflash_patches = os.path.join(CURRENT_PATH, 'dll/gen2/BTL_sflash.ptc')
-            self.write_raw_storage(2, 33*4096+8, load_file(sflash_patches)) # step 10
+            self.write_raw_storage(2, 33 * 4096 + 8, load_file(sflash_patches))  # step 10
 
     def switch_uart_to_apps(self):
         # ~ 1 sec delay by the APPS MCU
@@ -932,13 +936,16 @@ class CC3200Connection(object):
         command = OPCODE_SWITCH_2_APPS + struct.pack(">I", 26666667)
         self._send_packet(command)
         log.info("Resetting communications ...")
-        if platform.system() == 'Darwin': # mac os
+        if platform.system() == 'Darwin':  # mac os
             for i in range(3):
                 self.port.send_break()
             if not self._read_ack():
                 raise CC3200Error("no ACK after Switch UART to APPS MCU command")
         elif platform.system() == 'Linux':
-            for i in range(9):
+            break_counter = 10
+            if self.vinfo.bootloader[1] < 1:
+                break_counter = 9
+            for i in range(break_counter):
                 self.port.send_break()
             if not self._read_ack():
                 raise CC3200Error("no ACK after Switch UART to APPS MCU command")
@@ -946,7 +953,7 @@ class CC3200Connection(object):
             time.sleep(1)
             self.port.send_break(0.2)
             if not self._read_ack():
-                raise CC3200Error("no ACK after Switch UART to APPS MCU command")  
+                raise CC3200Error("no ACK after Switch UART to APPS MCU command")
         for i in range(8):
             self.vinfo_apps = self._get_version()
             if self.vinfo.bootloader[1] >= 4:
@@ -963,7 +970,7 @@ class CC3200Connection(object):
 
         log.info("Formatting flash with size=%s", size)
         command = OPCODE_FORMAT_FLASH \
-            + struct.pack(">IIIII", 2, size/4, 0, 0, 2)
+                  + struct.pack(">IIIII", 2, size / 4, 0, 0, 2)
 
         self._send_packet(command)
 
@@ -980,7 +987,7 @@ class CC3200Connection(object):
 
         log.info("Erasing file %s...", filename)
         command = OPCODE_ERASE_FILE + struct.pack(">I", 0) + \
-            filename + '\x00'
+                  filename + '\x00'
         self._send_packet(command)
         s = self._get_last_status()
         if not s.is_ok:
@@ -1020,7 +1027,8 @@ class CC3200Connection(object):
 
         timeout = self.port.timeout
         if (alloc_size_effective > 200000):
-            timeout = max(timeout, 5 * ((alloc_size_effective / 200000) + 1))  # empirical value is ~252925 bytes for 5 sec timeout
+            timeout = max(timeout, 5 * (
+                        (alloc_size_effective / 200000) + 1))  # empirical value is ~252925 bytes for 5 sec timeout
 
         log.info("Uploading file %s -> %s [%d, disk=%d]...",
                  local_file.name, cc_filename, alloc_size, alloc_size_effective)
@@ -1030,7 +1038,7 @@ class CC3200Connection(object):
 
         pos = 0
         while pos < file_len:
-            chunk = data[pos:pos+SLFS_BLOCK_SIZE]
+            chunk = data[pos:pos + SLFS_BLOCK_SIZE]
             command = OPCODE_FILE_CHUNK + struct.pack(">I", pos)
             command += chunk
             self._send_packet(command)
@@ -1075,12 +1083,12 @@ class CC3200Connection(object):
             if erase:
                 count = int(math.ceil(data_len / float(SLFS_BLOCK_SIZE)))
                 self._erase_blocks(0, count, storage_id=STORAGE_ID_SFLASH)
-    
+
             self._raw_write(8, data[8:], storage_id=STORAGE_ID_SFLASH)
             self._raw_write(0, data[:8], storage_id=STORAGE_ID_SFLASH)
         else:
             log.info('flash image size: %d', data_len)
-    
+
             flags = 0
             key_data = ''
             key_size = 0
@@ -1105,7 +1113,7 @@ class CC3200Connection(object):
                 log.info('FS programming status %d', status)
             if status:
                 log.info('FS programming aborted, bad response')
-            sys.stdout.write(os.linesep)   
+            sys.stdout.write(os.linesep)
 
     def read_flash(self, image_file, offset, size):
         data = self._raw_read(offset, size, storage_id=STORAGE_ID_SFLASH)
@@ -1213,13 +1221,13 @@ def main():
 
     try:
         p = serial.Serial()
-        p.baudrate=CC3200_BAUD
-        p.port=port_name
-        p.parity=serial.PARITY_NONE
-        p.stopbits=serial.STOPBITS_ONE
-        p.break_condition=True
+        p.baudrate = CC3200_BAUD
+        p.port = port_name
+        p.parity = serial.PARITY_NONE
+        p.stopbits = serial.STOPBITS_ONE
+        p.break_condition = True
         p.open()
-    except (Exception, ) as e:
+    except (Exception,) as e:
         log.warn("unable to open serial port %s: %s", port_name, e)
         sys.exit(-2)
 
@@ -1227,7 +1235,7 @@ def main():
     try:
         cc.connect()
         log.info("connected to target")
-    except (Exception, ) as e:
+    except (Exception,) as e:
         log.error("Could not connect to target: {}".format(e))
         sys.exit(-3)
 
@@ -1269,7 +1277,6 @@ def main():
 
         if command.cmd == "list_filesystem":
             cc.list_filesystem(command.json_output, command.inactive)
-
 
     if check_fat:
         fat_info = cc.get_fat_info()  # check FAT after each write_file operation
